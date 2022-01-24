@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import models.Usine.*;
+import models.Composant.ComposantE;
 
 public class MenuFenetre extends JMenuBar {
 
@@ -92,22 +93,45 @@ public class MenuFenetre extends JMenuBar {
 							if (!strInterval.equals("")) {
 								interval = Integer.parseInt(strInterval);
 							}
+
+							ArrayList<EntryComponent> ec = null;
+							var entries = el.getElementsByTagName("entree");
+							if (entries != null && entries.getLength() > 0) {
+								ec = new ArrayList<EntryComponent>();
+								for (int j = 0; j < entries.getLength(); ++j) {
+									if (n.getNodeType() == Node.ELEMENT_NODE) {
+										Element en = (Element) entries.item(i);
+										String type = en.getAttribute("type");
+										int amount = Integer.parseInt(en.getAttribute("quantite"));
+										ec.add(new EntryComponent(EntryComponent.getEntry(type), amount));
+									}
+
+								}
+							}
+							var sorties = el.getElementsByTagName("sortie");
+							ComposantE sortie = null;
+							if(sorties != null && sorties.getLength() > 0) {
+								var s =  (Element) sorties.item(1);
+								sortie = EntryComponent.getEntry(s.getAttribute("type"));
+							}
+							
+							
 							String s = el.getAttribute("type");
 							switch (s) {
 							case "usine-matiere":
-								UsineMatiere uMa = new UsineMatiere(paths, interval);
+								UsineMatiere uMa = new UsineMatiere(paths, interval, ec, sortie);
 								break;
 							case "usine-aile":
-								UsineAile ua = new UsineAile(paths, interval);								
+								UsineAile ua = new UsineAile(paths, interval, ec,sortie);
 								break;
 							case "usine-moteur":
-								UsineMoteur uMo = new UsineMoteur(paths, interval);
+								UsineMoteur uMo = new UsineMoteur(paths, interval, ec,sortie);
 								break;
 							case "usine-assemblage":
-								UsineAssemblage uAs = new UsineAssemblage(paths, interval);
+								UsineAssemblage uAs = new UsineAssemblage(paths, interval, ec,sortie);
 								break;
 							case "entrepot":
-								Entrepot en = new Entrepot(paths, interval);
+								Entrepot en = new Entrepot(paths, interval, ec,sortie);
 								break;
 							}
 							System.out.println(s);

@@ -1,6 +1,6 @@
 package models.Usine;
 
-public enum FullnessUsine {
+public enum FullnessE {
 VIDE,
 UN_TIERS,
 DEUX_TIERS,

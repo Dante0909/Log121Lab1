@@ -1,20 +1,39 @@
 package models.Usine;
 
+import models.Composant.ComposantE;
 
 public class EntryComponent {
 
-	private String type;
+	private ComposantE type;
 	private int amount;
-	public EntryComponent(String t, int a) {
+
+	public EntryComponent(ComposantE t, int a) {
 		// TODO Auto-generated constructor stub
 		type = t;
 		amount = a;
 	}
-	public String getType() {
+
+	public ComposantE getType() {
 		return type;
 	}
+
 	public int getAmount() {
 		return amount;
 	}
 
+	public static ComposantE getEntry(String c) {
+		switch (c) {
+		case "avion":
+			return ComposantE.AVION;
+		case "aile":
+			return ComposantE.AILE;
+		case "moteur":
+			return ComposantE.MOTEUR;
+		case "metal":
+			return ComposantE.METAL;
+		default:
+			return null;
+		}
+
+	}
 }
