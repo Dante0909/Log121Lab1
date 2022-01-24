@@ -2,6 +2,7 @@ package simulation;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -10,6 +11,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import models.Usine.*;
 
 public class MenuFenetre extends JMenuBar {
 
@@ -49,10 +59,71 @@ public class MenuFenetre extends JMenuBar {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				// TODO - Parser le fichier XML sélectionné
 				File selectedFile = fileChooser.getSelectedFile();
+				try {
+					// Instancier la Factory qui permet d'accï¿½der ï¿½ un parser (appelï¿½
+					// DocumentBuilder)
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+					// Rï¿½cupï¿½rer le parser
+					DocumentBuilder db;
+					db = dbf.newDocumentBuilder();
+					// Parser le fichier XML
+					Document doc = db.parse(selectedFile);
+					doc.getDocumentElement().normalize();
+					var nList = doc.getDocumentElement().getChildNodes().item(1).getChildNodes();
+
+					// System.out.println(nList.getChildNodes().item(1).getNodeName());
+
+					for (int i = 0; i < nList.getLength(); ++i) {
+						Node n = nList.item(i);
+						if (n.getNodeType() == Node.ELEMENT_NODE) {
+							Element el = (Element) nList.item(i);
+
+							var icones = el.getElementsByTagName("icone");
+							ArrayList<String> paths = new ArrayList<String>();
+							for (int j = 0; j < icones.getLength(); ++j) {
+								if (n.getNodeType() == Node.ELEMENT_NODE) {
+									Element ic = (Element) icones.item(i);
+									paths.add(ic.getAttribute("path"));
+								}
+
+							}
+							String strInterval = el.getAttribute("interval-production");
+							int interval = 0;
+							if (!strInterval.equals("")) {
+								interval = Integer.parseInt(strInterval);
+							}
+							String s = el.getAttribute("type");
+							switch (s) {
+							case "usine-matiere":
+								UsineMatiere uMa = new UsineMatiere(paths, interval);
+								break;
+							case "usine-aile":
+								UsineAile ua = new UsineAile(paths, interval);								
+								break;
+							case "usine-moteur":
+								UsineMoteur uMo = new UsineMoteur(paths, interval);
+								break;
+							case "usine-assemblage":
+								UsineAssemblage uAs = new UsineAssemblage(paths, interval);
+								break;
+							case "entrepot":
+								Entrepot en = new Entrepot(paths, interval);
+								break;
+							}
+							System.out.println(s);
+						}
+
+					}
+
+				} catch (Exception ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}
+
 				System.out.println(selectedFile.getAbsolutePath());
 			}
 		});
-		
+
 		menuQuitter.addActionListener((ActionEvent e) -> {
 			System.exit(0);
 		});
