@@ -22,9 +22,8 @@ public class PanneauPrincipal extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		// On ajoute à la position le delta x et y de la vitesse
-		var usines = MenuFenetre.Usines;
-		var chemins = MenuFenetre.Chemins;
-		
+		var usines = Simulation.Usines;
+		var chemins = Simulation.Chemins;
 		for(int i = 0; i < chemins.size();++i) {
 			Chemin c = chemins.get(i);
 			g.drawLine(c.getSX(),c.getSY(),c.getEX(),c.getEY());

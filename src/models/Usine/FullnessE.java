@@ -2,7 +2,7 @@ package models.Usine;
 
 public enum FullnessE {
 VIDE,
-UN_TIERS,
+UN_TIER,
 DEUX_TIERS,
 PLEIN
 }

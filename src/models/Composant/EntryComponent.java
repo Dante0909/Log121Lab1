@@ -1,6 +1,4 @@
-package models.Usine;
-
-import models.Composant.ComposantE;
+package models.Composant;
 
 public class EntryComponent {
 

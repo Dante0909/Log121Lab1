@@ -3,6 +3,7 @@ package models.Usine;
 import java.util.ArrayList;
 
 import models.Composant.ComposantE;
+import models.Composant.EntryComponent;
 
 public class UsineMoteur extends AUsine {
 
