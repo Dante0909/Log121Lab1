@@ -50,19 +50,19 @@ public abstract class AUsine extends AObjet {
 		return sortie;
 	}	
 	public BufferedImage getImage (FullnessE f) {
-		
+		if(f == null) return images.get(0);
 		switch(f) {
 		case VIDE:
 			return images.get(0);
 		case UN_TIER:
-			return images.get(0);
+			return images.get(1);
 			
 		case DEUX_TIERS:
-			return images.get(0);
+			return images.get(2);
 			
 		case PLEIN:
-			return images.get(0);
-			default: return null;
+			return images.get(3);
+			default: return images.get(0);
 		}
 	}
 	private void setImages(ArrayList<String> p) {

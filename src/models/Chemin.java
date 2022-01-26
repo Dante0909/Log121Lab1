@@ -4,26 +4,31 @@ import models.Usine.AUsine;
 
 public class Chemin {
 
-	private int startX;
-	private int startY;
-	private int endX;
-	private int endY;
-	private static final int OFFSET = 15; 
+	private AUsine from;
+	private AUsine to;
+	private int offset;
+
 	public Chemin(AUsine from, AUsine to) {
-		startX = from.getX();
-		startY = from.getY();
-		endX = to.getX();
-		endY = to.getY();
+		var i = from.getImage(null);
+		offset = i.getWidth() / 2;
+		this.from = from;
+		this.to = to;
 	}
+
 	public int getSX() {
-		return startX + OFFSET;
+		return from.getX() + offset;
 	}
+
 	public int getSY() {
-		return startY + OFFSET;
-	}public int getEX() {
-		return endX + OFFSET;
-	}public int getEY() {
-		return endY + OFFSET;
+		return from.getY() + offset;
 	}
-	
+
+	public int getEX() {
+		return to.getX() + offset;
+	}
+
+	public int getEY() {
+		return to.getY() + offset;
+	}
+
 }
