@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import models.Usine.*;
+import models.Chemin;
 import models.Composant.ComposantE;
 
 public class MenuFenetre extends JMenuBar {
@@ -32,6 +33,9 @@ public class MenuFenetre extends JMenuBar {
 	private static final String MENU_SIMULATION_CHOISIR = "Choisir";
 	private static final String MENU_AIDE_TITRE = "Aide";
 	private static final String MENU_AIDE_PROPOS = "À propos de...";
+
+	public static ArrayList<AUsine> Usines = new ArrayList<AUsine>();
+	public static ArrayList<Chemin> Chemins = new ArrayList<Chemin>();
 
 	public MenuFenetre() {
 		ajouterMenuFichier();
@@ -70,73 +74,107 @@ public class MenuFenetre extends JMenuBar {
 					// Parser le fichier XML
 					Document doc = db.parse(selectedFile);
 					doc.getDocumentElement().normalize();
-					var nList = doc.getDocumentElement().getChildNodes().item(1).getChildNodes();
 
-					// System.out.println(nList.getChildNodes().item(1).getNodeName());
+					Element meta = (Element) doc.getElementsByTagName("metadonnees").item(0);
+					var metausines = meta.getElementsByTagName("usine");
+
+					Element aileUsine = null;
+					Element matiereUsine = null;
+					Element moteurUsine = null;
+					Element avionUsine = null;
+					Element entrepotUsine = null;
+
+					for (int i = 0; i < metausines.getLength(); ++i) {
+						Node n = metausines.item(i);
+						if (n.getNodeType() == Node.ELEMENT_NODE) {
+							Element el = (Element) n;
+							String type = el.getAttribute("type");
+							switch (type) {
+							case "usine-matiere":
+								matiereUsine = el;
+								break;
+							case "usine-aile":
+								aileUsine = el;
+								break;
+							case "usine-moteur":
+								moteurUsine = el;
+								break;
+							case "usine-assemblage":
+								avionUsine = el;
+								break;
+							case "entrepot":
+								entrepotUsine = el;
+								break;
+							}
+						}
+
+					}
+
+					var simul = (Element) doc.getElementsByTagName("simulation").item(0);
+					var nList = simul.getElementsByTagName("usine");
 
 					for (int i = 0; i < nList.getLength(); ++i) {
 						Node n = nList.item(i);
 						if (n.getNodeType() == Node.ELEMENT_NODE) {
-							Element el = (Element) nList.item(i);
+							Element el = (Element) n;
 
-							var icones = el.getElementsByTagName("icone");
-							ArrayList<String> paths = new ArrayList<String>();
-							for (int j = 0; j < icones.getLength(); ++j) {
-								if (n.getNodeType() == Node.ELEMENT_NODE) {
-									Element ic = (Element) icones.item(i);
-									paths.add(ic.getAttribute("path"));
-								}
+							int id = Integer.parseInt(el.getAttribute("id"));
+							int x = Integer.parseInt(el.getAttribute("x"));
+							int y = Integer.parseInt(el.getAttribute("y"));
 
-							}
-							String strInterval = el.getAttribute("interval-production");
-							int interval = 0;
-							if (!strInterval.equals("")) {
-								interval = Integer.parseInt(strInterval);
-							}
+							String type = el.getAttribute("type");
 
-							ArrayList<EntryComponent> ec = null;
-							var entries = el.getElementsByTagName("entree");
-							if (entries != null && entries.getLength() > 0) {
-								ec = new ArrayList<EntryComponent>();
-								for (int j = 0; j < entries.getLength(); ++j) {
-									if (n.getNodeType() == Node.ELEMENT_NODE) {
-										Element en = (Element) entries.item(i);
-										String type = en.getAttribute("type");
-										int amount = Integer.parseInt(en.getAttribute("quantite"));
-										ec.add(new EntryComponent(EntryComponent.getEntry(type), amount));
-									}
-
-								}
-							}
-							var sorties = el.getElementsByTagName("sortie");
-							ComposantE sortie = null;
-							if(sorties != null && sorties.getLength() > 0) {
-								var s =  (Element) sorties.item(1);
-								sortie = EntryComponent.getEntry(s.getAttribute("type"));
-							}
-							
-							
-							String s = el.getAttribute("type");
-							switch (s) {
+							switch (type) {
 							case "usine-matiere":
-								UsineMatiere uMa = new UsineMatiere(paths, interval, ec, sortie);
+								UsineMatiere uMa = new UsineMatiere(GetPaths(matiereUsine), GetInterval(matiereUsine),
+										GetEntries(matiereUsine), GetExit(matiereUsine), id, x, y);
+								Usines.add(uMa);
+
 								break;
 							case "usine-aile":
-								UsineAile ua = new UsineAile(paths, interval, ec,sortie);
+								UsineAile ua = new UsineAile(GetPaths(aileUsine), GetInterval(aileUsine),
+										GetEntries(aileUsine), GetExit(aileUsine), id, x, y);
+								Usines.add(ua);
 								break;
 							case "usine-moteur":
-								UsineMoteur uMo = new UsineMoteur(paths, interval, ec,sortie);
+								UsineMoteur uMo = new UsineMoteur(GetPaths(moteurUsine), GetInterval(moteurUsine),
+										GetEntries(moteurUsine), GetExit(moteurUsine), id, x, y);
+								Usines.add(uMo);
 								break;
 							case "usine-assemblage":
-								UsineAssemblage uAs = new UsineAssemblage(paths, interval, ec,sortie);
+								UsineAssemblage uAs = new UsineAssemblage(GetPaths(avionUsine), GetInterval(avionUsine),
+										GetEntries(avionUsine), GetExit(avionUsine), id, x, y);
+								Usines.add(uAs);
 								break;
 							case "entrepot":
-								Entrepot en = new Entrepot(paths, interval, ec,sortie);
+								Entrepot en = new Entrepot(GetPaths(entrepotUsine), GetInterval(entrepotUsine),
+										GetEntries(entrepotUsine), GetExit(entrepotUsine), id, x, y);
+								Usines.add(en);
 								break;
 							}
-							System.out.println(s);
 						}
+					}
 
+					var ch = simul.getElementsByTagName("chemin");
+					for (int i = 0; i < ch.getLength(); ++i) {
+						Element el = (Element) ch.item(i);
+						int from = Integer.parseInt(el.getAttribute("de"));
+						int to = Integer.parseInt(el.getAttribute("vers"));
+						AUsine uFrom = null;
+						AUsine uTo = null;
+						
+						for (int j = 0; j < Usines.size(); ++j) {
+							AUsine u = Usines.get(j);
+							if (u.getId() == from) {
+								uFrom = u;
+							}
+							if (u.getId() == to) {
+								uTo = u;
+							}
+						}
+						if (uFrom != null && uTo != null) {
+							Chemins.add(new Chemin(uFrom, uTo));
+						}
 					}
 
 				} catch (Exception ex) {
@@ -195,4 +233,57 @@ public class MenuFenetre extends JMenuBar {
 		add(menuAide);
 	}
 
+	private ArrayList<String> GetPaths(Element e) {
+		var icones = e.getElementsByTagName("icone");
+		ArrayList<String> paths = new ArrayList<String>();
+		for (int i = 0; i < icones.getLength(); ++i) {
+			Node no = icones.item(i);
+			if (no.getNodeType() == Node.ELEMENT_NODE) {
+				Element ic = (Element) icones.item(i);
+				paths.add(ic.getAttribute("path"));
+			}
+
+		}
+		return paths;
+	}
+
+	private int GetInterval(Element e) {
+		String strInterval = e.getAttribute("interval-production");
+		int interval = -1;
+		if (!strInterval.equals("")) {
+			interval = Integer.parseInt(strInterval);
+		}
+		return interval;
+	}
+
+	private ArrayList<EntryComponent> GetEntries(Element e) {
+		ArrayList<EntryComponent> ec = null;
+		var entries = e.getElementsByTagName("entree");
+		if (entries != null && entries.getLength() > 0) {
+			ec = new ArrayList<EntryComponent>();
+			for (int i = 0; i < entries.getLength(); ++i) {
+				Node no = entries.item(i);
+				if (no.getNodeType() == Node.ELEMENT_NODE) {
+					Element en = (Element) no;
+					String type = en.getAttribute("type");
+					String strQuantite = en.getAttribute("quantite");
+					if (strQuantite.equals(""))
+						return null;
+					int amount = Integer.parseInt(strQuantite);
+					ec.add(new EntryComponent(EntryComponent.getEntry(type), amount));
+				}
+			}
+		}
+		return ec;
+	}
+
+	private ComposantE GetExit(Element e) {
+		var sorties = e.getElementsByTagName("sortie");
+		ComposantE sortie = null;
+		if (sorties != null && sorties.getLength() > 0) {
+			var s = (Element) sorties.item(0);
+			sortie = EntryComponent.getEntry(s.getAttribute("type"));
+		}
+		return sortie;
+	}
 }

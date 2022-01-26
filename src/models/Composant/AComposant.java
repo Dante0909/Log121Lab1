@@ -9,6 +9,8 @@ public class AComposant extends AObjet {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	public void setPos(int x, int y) {
+		super.setPos(x, y);
+	}
 
 }

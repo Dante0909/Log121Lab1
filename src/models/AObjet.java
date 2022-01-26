@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public abstract class AObjet {
 	
 	private String baseIconPath;
+	private int x;
+	private int y;
 	
 	public AObjet(ArrayList<String> p) throws Exception {
 		if(p!= null && p.size()>0) {
@@ -23,6 +25,16 @@ public abstract class AObjet {
 	private void setPath(String b) 
 	{
 		baseIconPath = b;
+	}
+	protected void setPos(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
 	}
 	
 }
