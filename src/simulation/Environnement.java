@@ -13,6 +13,12 @@ public class Environnement extends SwingWorker<Object, String> {
 			/**
 			 * C'est ici que vous aurez à faire la gestion de la notion de tour.
 			 */
+			var usines = Simulation.Usines;
+			for(int i = 0; i<usines.size();++i) {
+				usines.get(i).lap();
+			}
+			
+			
 			firePropertyChange("TEST", null,"test");
 		}
 		return null;

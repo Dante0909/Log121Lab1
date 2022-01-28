@@ -13,26 +13,16 @@ import models.Composant.EntryComponent;
 
 public abstract class AUsine extends AObjet {
 	private int id;
-	private int interval;
 	private FullnessE fullness;
-	private ArrayList<EntryComponent> entries;
-	private ComposantE sortie;
+	protected ArrayList<EntryComponent> entries;
 	private ArrayList<BufferedImage> images;
-	public AUsine(ArrayList<String> p, int i, ArrayList<EntryComponent> ec, ComposantE product, int id, int x, int y) throws Exception {
+	public AUsine(ArrayList<String> p, ArrayList<EntryComponent> ec, int id, int x, int y) throws Exception {
 		super.setPos(x, y);
-		interval = i;
 		setFullness(FullnessE.VIDE);
 		entries = ec;
-		sortie = product;
 		setImages(p);
 		this.id = id;
 	}
-
-	public int getInterval() {
-		return interval;
-
-	}
-
 	public FullnessE getFullness() {
 		return fullness;
 	}
@@ -40,15 +30,7 @@ public abstract class AUsine extends AObjet {
 	public void setFullness(FullnessE f) {
 		fullness = f;
 	}
-
-	public ArrayList<EntryComponent> getEntries() {
-		return entries;
-	}
-
 	
-	public ComposantE getSortie() {
-		return sortie;
-	}	
 	public BufferedImage getImage (FullnessE f) {
 		if(f == null) return images.get(0);
 		switch(f) {
@@ -81,4 +63,5 @@ public abstract class AUsine extends AObjet {
 	public int getId() {
 		return id;
 	}
+	public abstract void lap();
 }

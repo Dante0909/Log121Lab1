@@ -88,8 +88,8 @@ public class XmlParser {
 
 						break;
 					case "usine-aile":
-						UsineAile ua = new UsineAile(GetPaths(aileUsine), GetInterval(aileUsine),
-								GetEntries(aileUsine), GetExit(aileUsine), id, x, y);
+						UsineAile ua = new UsineAile(GetPaths(aileUsine), GetInterval(aileUsine), GetEntries(aileUsine),
+								GetExit(aileUsine), id, x, y);
 						Usines.add(ua);
 						break;
 					case "usine-moteur":
@@ -103,8 +103,7 @@ public class XmlParser {
 						Usines.add(uAs);
 						break;
 					case "entrepot":
-						Entrepot en = new Entrepot(GetPaths(entrepotUsine), GetInterval(entrepotUsine),
-								GetEntries(entrepotUsine), GetExit(entrepotUsine), id, x, y);
+						Entrepot en = new Entrepot(GetPaths(entrepotUsine), GetEntries(entrepotUsine), id, x, y);
 						Usines.add(en);
 						break;
 					}
@@ -118,7 +117,7 @@ public class XmlParser {
 				int to = Integer.parseInt(el.getAttribute("vers"));
 				AUsine uFrom = null;
 				AUsine uTo = null;
-				
+
 				for (int j = 0; j < Usines.size(); ++j) {
 					AUsine u = Usines.get(j);
 					if (u.getId() == from) {
@@ -155,7 +154,7 @@ public class XmlParser {
 	}
 
 	private static int GetInterval(Element e) {
-		String strInterval = e.getAttribute("interval-production");
+		String strInterval = e.getElementsByTagName("interval-production").item(0).getTextContent();
 		int interval = -1;
 		if (!strInterval.equals("")) {
 			interval = Integer.parseInt(strInterval);
