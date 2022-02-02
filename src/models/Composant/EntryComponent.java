@@ -3,12 +3,14 @@ package models.Composant;
 public class EntryComponent {
 
 	private ComposantE type;
-	private int amount;
+	private int amountNeeded;
+	private int currentAmount;
 
+	
 	public EntryComponent(ComposantE t, int a) {
 		// TODO Auto-generated constructor stub
 		type = t;
-		amount = a;
+		amountNeeded = a;
 	}
 
 	public ComposantE getType() {
@@ -16,7 +18,7 @@ public class EntryComponent {
 	}
 
 	public int getAmount() {
-		return amount;
+		return amountNeeded;
 	}
 
 	public static ComposantE getEntry(String c) {

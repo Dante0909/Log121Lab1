@@ -3,6 +3,7 @@ package models.Usine;
 import java.util.ArrayList;
 import java.util.Observer;
 
+import models.Chemin;
 import models.Composant.ComposantE;
 import models.Composant.EntryComponent;
 

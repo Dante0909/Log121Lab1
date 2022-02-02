@@ -1,20 +1,20 @@
 package models;
-
+import java.awt.Point;
 
 public abstract class AObjet {
-	
-	private int x;
-	private int y;
+	private Point point;
 	
 	protected void setPos(int x, int y) {
-		this.x = x;
-		this.y = y;
+		point = new Point(x,y);
 	}
 	public int getX() {
-		return x;
+		return point.x;
 	}
 	public int getY() {
-		return y;
+		return point.y;
 	}
-	
+	public Point getPoint() {
+		return point;
+	}
+	public abstract void lap();
 }

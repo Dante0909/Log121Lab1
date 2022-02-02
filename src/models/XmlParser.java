@@ -20,7 +20,6 @@ public class XmlParser {
 	public static void ParseFile(File f) {
 		try {
 			var Usines = Simulation.Usines;
-			var Chemins = Simulation.Chemins;
 			// Instancier la Factory qui permet d'acc�der � un parser (appel�
 			// DocumentBuilder)
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -128,7 +127,7 @@ public class XmlParser {
 					}
 				}
 				if (uFrom != null && uTo != null) {
-					Chemins.add(new Chemin(uFrom, uTo));
+					((AUsineProduction) uFrom).setProductPath(new Chemin(uFrom, uTo));
 				}
 			}
 

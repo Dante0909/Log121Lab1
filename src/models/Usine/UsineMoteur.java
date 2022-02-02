@@ -25,5 +25,6 @@ public class UsineMoteur extends AUsineProduction {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 }

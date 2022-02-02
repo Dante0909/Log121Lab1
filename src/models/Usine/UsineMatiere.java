@@ -19,6 +19,7 @@ public class UsineMatiere extends AUsineProduction {
 		
 	}
 
+	
 	@Override
 	public void lap() {
 		super.lap();
@@ -29,7 +30,7 @@ public class UsineMatiere extends AUsineProduction {
 	@Override
 	public boolean tryToProduce() {
 		if(super.tryToProduce()) {
-			
+			super.produce();
 		}
 	return false;	
 	}
