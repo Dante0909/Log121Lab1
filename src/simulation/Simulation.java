@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import models.Chemin;
 import models.Composant.AComposant;
 import models.Usine.AUsine;
+import models.Usine.Entrepot;
 
 public class Simulation {
 
@@ -13,6 +14,17 @@ public class Simulation {
 	 */
 	public static ArrayList<AUsine> Usines = new ArrayList<AUsine>();
 	public static ArrayList<AComposant> Composants = new ArrayList<AComposant>();
+	
+	public static void trySetVenteStrategy(String s) {
+		if(Usines != null) {
+			for(int i = 0; i < Usines.size(); ++i) {
+				var u = Usines.get(i);
+				if(u instanceof Entrepot) {
+					((Entrepot) u).setStrategy(s);
+				}
+			}
+		}
+	}
 	
 	public static void main(String[] args) {
 		Environnement environnement = new Environnement();

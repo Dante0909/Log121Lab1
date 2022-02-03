@@ -17,22 +17,16 @@ public abstract class AUsine extends AObjet {
 	private ArrayList<BufferedImage> images;
 
 	public AUsine(ArrayList<String> p, ArrayList<EntryComponent> ec, int id, int x, int y) throws Exception {
-		super.setPos(x, y);
-		setFullness(FullnessE.VIDE);
+		super.setPos(x, y);		
 		entries = ec;
 		setImages(p);
 		this.id = id;
 	}
 
-	public FullnessE getFullness() {
-		return fullness;
-	}
+	public abstract FullnessE getFullness();
 
-	public void setFullness(FullnessE f) {
-		fullness = f;
-	}
-
-	public BufferedImage getImage(FullnessE f) {
+	public BufferedImage getImage() {
+		var f = getFullness();
 		if (f == null)
 			return images.get(0);
 		switch (f) {
@@ -69,18 +63,23 @@ public abstract class AUsine extends AObjet {
 		return id;
 	}
 
-	public ComposantE receiveComponent(AComposant comp) {
+	public void receiveComponent(AComposant comp) {
 		
-		
+		ComposantE c;
 		
 		if (comp instanceof Aile)
-			return ComposantE.AILE;
+			c = ComposantE.AILE;
 		else if (comp instanceof Avion)
-			return ComposantE.AVION;
+			c = ComposantE.AVION;
 		else if (comp instanceof Metal)
-			return ComposantE.METAL;
+			c = ComposantE.METAL;
 		else
-			return ComposantE.MOTEUR;
+			c =  ComposantE.MOTEUR;
+		for(int i = 0; i < entries.size(); ++i) {
+			var e = entries.get(i);
+			e.tryAddComp(c);
+		}
+		
 	}
 
 }

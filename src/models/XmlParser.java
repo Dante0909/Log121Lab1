@@ -20,6 +20,7 @@ public class XmlParser {
 	public static void ParseFile(File f) {
 		try {
 			var Usines = Simulation.Usines;
+			Usines.clear();
 			// Instancier la Factory qui permet d'acc�der � un parser (appel�
 			// DocumentBuilder)
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -67,6 +68,7 @@ public class XmlParser {
 
 			var simul = (Element) doc.getElementsByTagName("simulation").item(0);
 			var nList = simul.getElementsByTagName("usine");
+			Entrepot en = null;
 
 			for (int i = 0; i < nList.getLength(); ++i) {
 				Node n = nList.item(i);
@@ -102,10 +104,17 @@ public class XmlParser {
 						Usines.add(uAs);
 						break;
 					case "entrepot":
-						Entrepot en = new Entrepot(GetPaths(entrepotUsine), GetEntries(entrepotUsine), id, x, y);
+						en = new Entrepot(GetPaths(entrepotUsine), GetEntries(entrepotUsine), id, x, y);
+
 						Usines.add(en);
 						break;
 					}
+				}
+			}
+			for(int i = 0; i < Usines.size(); ++i) {
+				var u = Usines.get(i);
+				if(u instanceof AUsineProduction) {
+					en.attach((AUsineProduction)u);
 				}
 			}
 
@@ -165,15 +174,22 @@ public class XmlParser {
 		ArrayList<EntryComponent> ec = null;
 		var entries = e.getElementsByTagName("entree");
 		if (entries != null && entries.getLength() > 0) {
+
 			ec = new ArrayList<EntryComponent>();
 			for (int i = 0; i < entries.getLength(); ++i) {
+
 				Node no = entries.item(i);
 				if (no.getNodeType() == Node.ELEMENT_NODE) {
+
 					Element en = (Element) no;
 					String type = en.getAttribute("type");
 					String strQuantite = en.getAttribute("quantite");
-					if (strQuantite.equals(""))
-						return null;
+					
+					if (strQuantite.equals("")) {
+						strQuantite = en.getAttribute("capacite");
+						if (strQuantite.equals("")) return null;
+					}
+
 					int amount = Integer.parseInt(strQuantite);
 					ec.add(new EntryComponent(EntryComponent.getEntry(type), amount));
 				}

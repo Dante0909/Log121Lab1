@@ -35,7 +35,7 @@ public class PanneauPrincipal extends JPanel {
 					g.drawLine(c.getSX(), c.getSY(), c.getEX(), c.getEY());
 			}
 
-			d2.drawImage(u.getImage(u.getFullness()), u.getX(), u.getY(), null);
+			d2.drawImage(u.getImage(), u.getX(), u.getY(), null);
 
 		}
 		var composants = Simulation.Composants;

@@ -18,14 +18,16 @@ public class PanneauStrategie extends JPanel {
 	public PanneauStrategie() {
 
 		ButtonGroup groupeBoutons = new ButtonGroup();
-		JRadioButton strategie1 = new JRadioButton("Stratégie 1");
-		JRadioButton strategie2 = new JRadioButton("Stratégie 2");	
+		JRadioButton strategie1 = new JRadioButton("Aléatoire");
+		JRadioButton strategie2 = new JRadioButton("Temporel");	
 		
 		JButton boutonConfirmer = new JButton("Confirmer");
 
 		boutonConfirmer.addActionListener((ActionEvent e) -> {
 			// TODO - Appeler la bonne stratégie
-			System.out.println(getSelectedButtonText(groupeBoutons));
+			String s = getSelectedButtonText(groupeBoutons);
+			System.out.println(s);
+			Simulation.trySetVenteStrategy(s);
 			// Fermer la fenêtre du composant
 			SwingUtilities.getWindowAncestor((Component) e.getSource()).dispose();
 		});

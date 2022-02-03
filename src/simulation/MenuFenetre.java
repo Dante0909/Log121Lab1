@@ -38,24 +38,24 @@ public class MenuFenetre extends JMenuBar {
 
 		menuCharger.addActionListener((ActionEvent e) -> {
 			
-			File selectedFile = new File("src/ressources/configuration.xml");
-			XmlParser.ParseFile(selectedFile);
-//			JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-//			fileChooser.setDialogTitle("Sélectionnez un fichier de configuration");
-//			fileChooser.setAcceptAllFileFilterUsed(false);
-//			// Créer un filtre
-//			FileNameExtensionFilter filtre = new FileNameExtensionFilter(".xml", "xml");
-//			fileChooser.addChoosableFileFilter(filtre);
-//
-//			int returnValue = fileChooser.showOpenDialog(null);
-//
-//			if (returnValue == JFileChooser.APPROVE_OPTION) {
-//				// TODO - Parser le fichier XML sélectionné
-//				File selectedFile = fileChooser.getSelectedFile();
-//				XmlParser.ParseFile(selectedFile);
-//				
-//				System.out.println(selectedFile.getAbsolutePath());
-//			}
+			//File selectedFile = new File("src/ressources/configuration.xml");
+			//XmlParser.ParseFile(selectedFile);
+			JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+			fileChooser.setDialogTitle("Sélectionnez un fichier de configuration");
+			fileChooser.setAcceptAllFileFilterUsed(false);
+			// Créer un filtre
+			FileNameExtensionFilter filtre = new FileNameExtensionFilter(".xml", "xml");
+			fileChooser.addChoosableFileFilter(filtre);
+
+			int returnValue = fileChooser.showOpenDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				// TODO - Parser le fichier XML sélectionné
+				File selectedFile = fileChooser.getSelectedFile();
+				XmlParser.ParseFile(selectedFile);
+				
+				System.out.println(selectedFile.getAbsolutePath());
+			}
 		});
 
 		menuQuitter.addActionListener((ActionEvent e) -> {

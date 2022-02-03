@@ -1,9 +1,11 @@
 package models.Usine;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Observer;
 
-import models.Chemin;
+import ProductionStrategy.*;
+import models.*;
 import models.Composant.*;
 import simulation.Simulation;
 
@@ -13,6 +15,7 @@ public abstract class AUsineProduction extends AUsine implements Observer {
 	private int maxInterval;
 	private ComposantE sortie;
 	private Chemin productPath;
+	private AProduceBehaviour prodB = new ProduceRegular();
 
 	public AUsineProduction(ArrayList<String> p, int interval, ArrayList<EntryComponent> ec, ComposantE product, int id,
 			int x, int y) throws Exception {
@@ -32,46 +35,66 @@ public abstract class AUsineProduction extends AUsine implements Observer {
 	}
 
 	@Override
-	public void lap() {
-		interval--;
-		if (interval == 0) {
-			if (tryToProduce()) {
-				produce();
-			}
-			interval = maxInterval;
-			if (this instanceof UsineMatiere) {
-				System.out.println("interval");
-			}
+	public FullnessE getFullness() {
+		var d = (float) interval / (float) maxInterval;
 
+		if (d > 0.66f)
+			return FullnessE.VIDE;
+		else if (d > 0.33f)
+			return FullnessE.UN_TIER;
+		else if (d > 0.1f)
+			return FullnessE.DEUX_TIERS;
+
+		return FullnessE.PLEIN;
+	}
+
+	@Override
+	public void lap() {
+		if (prodB.tryProduce(entries)) {
+			interval--;
+			if (interval == 0) {
+				produce(null);
+				interval = maxInterval;
+			}
 		}
 	}
 
-	public boolean tryToProduce() {
-		return true;
-	}
+	@Override
+	public void update(Observable o, Object arg) {
 
-	public void produce() {
-		int posX = super.getX();
-		int posY = super.getY();
-		AComposant a = null;
-		System.out.println(sortie);
-		switch (sortie) {
-		case AILE:
-			a = new Aile(posX, posY, this.getProductPath());
+		switch ((FullnessE)arg) {
+		case UN_TIER:
+			prodB = new ProduceSlightlyFilled();
 			break;
-		case AVION:
-			a = new Avion(posX, posY, this.getProductPath());
+		case DEUX_TIERS:
+			prodB = new ProduceHighlyFilled();
 			break;
-		case METAL:
-			a = new Metal(posX, posY, this.getProductPath());
-			break;
-		case MOTEUR:
-			a = new Moteur(posX, posY, this.getProductPath());
+		case PLEIN:
+			prodB = new ProduceFilled();
 			break;
 		default:
+			prodB = new ProduceRegular();
 			break;
 
 		}
+		//System.out.println(prodB.getClass().getName());
+	}
+
+//	public boolean tryToProduce() {
+//		if(entries == null) return true;
+//		for(int i = 0; i < entries.size(); ++i) {
+//			if(!entries.get(i).isReady()) return false;
+//		}
+//		return true;
+//	}
+
+	public void produce(AComposant a) {
+		if (entries != null) {
+			for (int i = 0; i < entries.size(); ++i) {
+				entries.get(i).resetProduction();
+			}
+		}
+
 		Simulation.Composants.add(a);
 	}
 
@@ -82,10 +105,5 @@ public abstract class AUsineProduction extends AUsine implements Observer {
 	public Chemin getProductPath() {
 		return productPath;
 	}
-	@Override
-	public ComposantE receiveComponent(AComposant comp) {
-		var c = super.receiveComponent(comp);
-		
-		return null;
-	}
+
 }

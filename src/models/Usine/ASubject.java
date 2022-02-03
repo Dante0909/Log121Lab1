@@ -24,7 +24,8 @@ public abstract class ASubject extends AUsine {
 	public void notifyObservers() {
 		for(int i = 0; i < observers.size();++i) {
 			var o = observers.get(i);
-			o.update(null, observers);
+			FullnessE f = this.getFullness();
+			o.update(null, f);
 		}
 	}
 }

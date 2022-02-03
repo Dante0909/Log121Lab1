@@ -2,6 +2,7 @@ package models.Composant;
 
 import models.AObjet;
 import models.Chemin;
+import simulation.Simulation;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -49,8 +50,10 @@ public abstract class AComposant extends AObjet {
 		p.translate(translateX, translateY);
 		var u = productPath.getDestination();
 		if(p.x == u.getX() && p.y == u.getY()) {
-			u.receiveComponent(null);
+			u.receiveComponent(this);
+			Simulation.Composants.remove(this);
 		}
+		
 	}
 
 	private void setTranslates() {

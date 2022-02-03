@@ -3,8 +3,7 @@ package models.Usine;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import models.Composant.ComposantE;
-import models.Composant.EntryComponent;
+import models.Composant.*;
 
 public class UsineMoteur extends AUsineProduction {
 
@@ -14,17 +13,15 @@ public class UsineMoteur extends AUsineProduction {
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void lap() {
 		super.lap();
 		// TODO Auto-generated method stub
 		
 	}
-	
+	@Override
+	public void produce(AComposant c) {
+		Moteur m = new Moteur(super.getX(), super.getY(), this.getProductPath());
+		super.produce(m);
+	}
 
 }

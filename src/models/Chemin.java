@@ -8,9 +8,8 @@ public class Chemin {
 	private AUsine to;
 	private int offset;
 
-	
 	public Chemin(AUsine from, AUsine to) {
-		var i = from.getImage(null);
+		var i = from.getImage();
 		offset = i.getWidth() / 2;
 		this.from = from;
 		this.to = to;
@@ -31,7 +30,8 @@ public class Chemin {
 	public int getEY() {
 		return to.getY() + offset;
 	}
-public AUsine getDestination() {
-	return to;
-}
+
+	public AUsine getDestination() {
+		return to;
+	}
 }

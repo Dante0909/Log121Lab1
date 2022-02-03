@@ -18,7 +18,21 @@ public class EntryComponent {
 	}
 
 	public int getAmount() {
-		return amountNeeded;
+		return currentAmount;
+	}
+	public boolean isReady() {
+		return currentAmount >= amountNeeded;
+	}
+	public void tryAddComp(ComposantE c) {
+		if(c == type) {
+			currentAmount++;
+		}
+	}
+	public void resetProduction() {
+		currentAmount = 0;
+	}
+	public void removeComp() {
+		currentAmount--;
 	}
 
 	public static ComposantE getEntry(String c) {

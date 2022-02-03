@@ -3,8 +3,7 @@ package models.Usine;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import models.Composant.ComposantE;
-import models.Composant.EntryComponent;
+import models.Composant.*;
 
 public class UsineAssemblage extends AUsineProduction {
 
@@ -13,17 +12,17 @@ public class UsineAssemblage extends AUsineProduction {
 		super(paths, interval, ec,sortie, id,x,y);
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void lap() {
 		super.lap();
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void produce(AComposant c) {
+		Avion a = new Avion(super.getX(), super.getY(), this.getProductPath());
+		super.produce(a);
 	}
 
 }
