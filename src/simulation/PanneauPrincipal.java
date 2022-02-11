@@ -22,7 +22,7 @@ public class PanneauPrincipal extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		// On ajoute à la position le delta x et y de la vitesse
+		
 		var usines = Simulation.Usines;
 
 		Graphics2D d2 = (Graphics2D) g;
@@ -47,7 +47,6 @@ public class PanneauPrincipal extends JPanel {
 			
 		}
 		position.translate(vitesse.x, vitesse.y);
-		// g.fillRect(position.x, position.y, taille, taille);
 
 	}
 
