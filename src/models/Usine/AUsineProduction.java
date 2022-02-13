@@ -77,16 +77,7 @@ public abstract class AUsineProduction extends AUsine implements Observer {
 			break;
 
 		}
-		//System.out.println(prodB.getClass().getName());
 	}
-
-//	public boolean tryToProduce() {
-//		if(entries == null) return true;
-//		for(int i = 0; i < entries.size(); ++i) {
-//			if(!entries.get(i).isReady()) return false;
-//		}
-//		return true;
-//	}
 
 	public void produce(AComposant a) {
 		if (entries != null) {
